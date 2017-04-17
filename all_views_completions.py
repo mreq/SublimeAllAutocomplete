@@ -25,7 +25,7 @@ class AllAutocomplete(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, locations):
         if is_disabled_in(view.scope_name(locations[0])):
             return []
-         
+
         words = []
 
         # Limit number of views but always include the active view. This
@@ -86,14 +86,14 @@ def fix_truncation(view, words):
     start_time = time.time()
 
     for i, w in enumerate(words):
-        #The word is truncated if and only if it cannot be found with a word boundary before and after
+        # The word is truncated if and only if it cannot be found with a word boundary before and after
 
         # this fails to match strings with trailing non-alpha chars, like
         # 'foo?' or 'bar!', which are common for instance in Ruby.
         match = view.find(r'\b' + re.escape(w) + r'\b', 0)
         truncated = is_empty_match(match)
         if truncated:
-            #Truncation is always by a single character, so we extend the word by one word character before a word boundary
+            # Truncation is always by a single character, so we extend the word by one word character before a word boundary
             extended_words = []
             view.find_all(r'\b' + re.escape(w) + r'\w\b', 0, "$0", extended_words)
             if len(extended_words) > 0:
@@ -103,7 +103,7 @@ def fix_truncation(view, words):
                 # use the old word if we didn't find any extended matches
                 fixed_words.append(w)
         else:
-            #Pass through non-truncated words
+            # Pass through non-truncated words
             fixed_words.append(w)
 
         # if too much time is spent in here, bail out,
